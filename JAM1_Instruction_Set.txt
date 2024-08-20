@@ -1,0 +1,313 @@
+Cheat Sheet:
+
+Stage 1A: XXXX (ALU Control) XX (LHS Control) XX (RHS Control)
+
+Stage 1B: X (No Fetch) XXX (Xfer Assert Control) XXXX (Dec and Xfer Load Control) 
+
+Stage 2A: XXXX (Data Load Control) XXXX (Data Assert Control) 
+
+Stage 2B: X (Bus Claim) XXX (Addr Assert Control) X X (PCRA Flip) XX (Inc Control) 
+
+
+Data Bus Device Numbers: NULL: 0   A: 1   B: 2   C: 3   D: 4   CONST: 5   TL: 6   TH: 7   ALU: 8   E: LCD   MEMBRIDGE: F
+
+Xfer Bus Device Numbers: CONST: 0  PC: 1  RA: 2  SP: 3  SI: 4  DI: 5  TX: 6
+
+
+ALU Control: XX (Carry Control) XX (Shift Control) XXXX (Logic Control)
+
+Carry Controls: 0: Zero  1: Previous Carry  2: One
+
+Shift Controls: 0: Unchanged  1: Left  2: Right  3: Zero
+
+Logic Controls: C: RHS  3: Not RHS  0: Zero  F: Two Fifty Five  8: AND  E: OR  6: XOR
+
+
+
+Instruction Set:
+
+NOP       		db: 00
+
+MOV  A,  #       	db: 01, #
+MOV  B,  #       	db: 02, #
+MOV  C,  #       	db: 03, #
+MOV  D,  #       	db: 04, #
+MOV  TL, #		db: 05, #
+MOV  TH, #		db: 06, #
+
+MOV  A,  B      	db: 07
+MOV  A,  C      	db: 08
+MOV  A,  D    	   	db: 09
+MOV  B,  A      	db: 0A
+MOV  B,  C      	db: 0B
+MOV  B,  D      	db: 0C
+MOV  C,  A      	db: 0D
+MOV  C,  B      	db: 0E
+MOV  C,  D       	db: 0F
+MOV  D,  A      	db: 10
+MOV  D,  B     	  	db: 11
+MOV  D,  C     	  	db: 12
+
+MOV  TL, A		db: 13
+MOV  TL, B		db: 14
+MOV  TL, C		db: 15
+MOV  TL, D		db: 16
+MOV  TH, A		db: 17
+MOV  TH, B		db: 18
+MOV  TH, C		db: 19
+MOV  TH, D		db: 1A
+MOV  A,  TL		db: 1B
+MOV  B,  TL		db: 1C
+MOV  C,  TL		db: 1D
+MOV  D,  TL		db: 1E
+MOV  A,  TH		db: 1F
+MOV  B,  TH		db: 20
+MOV  C,  TH		db: 21
+MOV  D,  TH		db: 22
+
+MOV  RA, TX		db: 23
+MOV  TX, RA		db: 24
+MOV  SP, TX		db: 25
+MOV  TX, SP		db: 26
+MOV  SI, TX		db: 27
+MOV  TX, SI		db: 28
+MOV  DI, TX		db: 29
+MOV  TX, DI		db: 2A
+MOV  DI, SI		db: 2B
+MOV  SI, DI		db: 2C
+
+DEC  RA			db: 30
+DEC  SP			db: 31
+DEC  SI			db: 32
+DEC  DI			db: 33
+INC  SP			db: 34
+INC  SI			db: 35
+INC  DI			db: 36
+
+OUT  LCD, A		db: 37
+
+MOV  A,  [SI]		db: 40
+MOV  B,  [SI]		db: 41
+MOV  C,  [SI]		db: 42
+MOV  D,  [SI]		db: 43
+MOV  A,  [DI]		db: 44
+MOV  B,  [DI]		db: 45
+MOV  C,  [DI]		db: 46
+MOV  D,  [DI]		db: 47
+MOV  A,  [TX]		db: 48
+MOV  B,  [TX]		db: 49
+MOV  C,  [TX]		db: 4A
+MOV  D,  [TX]		db: 4B
+MOV  [SI],  A		db: 4C
+MOV  [SI],  B		db: 4D
+MOV  [SI],  C		db: 4E
+MOV  [SI],  D		db: 4F
+MOV  [DI],  A		db: 50
+MOV  [DI],  B		db: 51
+MOV  [DI],  C		db: 52
+MOV  [DI],  D		db: 53
+MOV  [TX],  A		db: 54
+MOV  [TX],  B		db: 55
+MOV  [TX],  C		db: 56
+MOV  [TX],  D		db: 57
+
+CALL TX			db: 58
+RET			db: 59
+
+JMP  TX			db: 5F, 60
+
+JO   TX			db: 5F, 61
+JNO  TX			db: 5F, 62
+
+JS   TX			db: 5F, 63
+JNS  TX			db: 5F, 64
+
+JZ   TX			db: 5F, 65
+JNZ  TX			db: 5F, 66
+JE   TX			db: 5F, 65
+JNE  TX			db: 5F, 66
+
+JC   TX			db: 5F, 67
+JNAE TX			db: 5F, 67
+JB   TX			db: 5F, 67
+JNC  TX			db: 5F, 68
+JAE  TX			db: 5F, 68
+JNB  TX			db: 5F, 68
+JBE  TX			db: 5F, 69
+JNA  TX			db: 5F, 69
+JA   TX			db: 5F, 6A
+JNBE TX			db: 5F, 6A
+
+JL   TX			db: 5F, 6B
+JNGE TX			db: 5F, 6B
+JGE  TX			db: 5F, 6C
+JNL  TX			db: 5F, 6C
+JLE  TX			db: 5F, 6D
+JNG  TX			db: 5F, 6D
+JG   TX			db: 5F, 6E
+JNLE TX			db: 5F, 6E
+
+JLC  TX			db: 5F, 6F
+JNLC TX			db: 5F, 70
+
+JMP  DI			db: 5F, 71
+
+PUSH A			db: 72
+PUSH B			db: 73
+PUSH C			db: 74
+PUSH D			db: 75
+PUSH TL			db: 76
+PUSH TH			db: 77
+POP  A			db: 78
+POP  B			db: 79
+POP  C			db: 7A
+POP  D			db: 7B
+POP  TL			db: 7C
+POP  TH			db: 7D
+
+CLC			db: 7F
+
+SHL  A			db: 80
+SHL  B			db: 81
+SHL  C			db: 82
+SHL  D			db: 83
+SHR  A			db: 84
+SHR  B			db: 85
+SHR  C			db: 86
+SHR  D			db: 87
+
+ADD  A,  B     	  	db: 88
+ADD  A,  C    	   	db: 89
+ADD  A,  D     	  	db: 8A
+ADD  B,  A       	db: 8B
+ADD  B,  C      	db: 8C
+ADD  B,  D      	db: 8D
+ADD  C,  A       	db: 8E
+ADD  C,  B      	db: 8F
+ADD  C,  D      	db: 90
+ADD  D,  A      	db: 91
+ADD  D,  B	 	db: 92
+ADD  D,  C 	 	db: 93
+
+ADDC A,  B     	  	db: 94
+ADDC A,  C    	   	db: 95
+ADDC A,  D     	  	db: 96
+ADDC B,  A       	db: 97
+ADDC B,  C      	db: 98
+ADDC B,  D      	db: 99
+ADDC C,  A       	db: 9A
+ADDC C,  B      	db: 9B
+ADDC C,  D      	db: 9C
+ADDC D,  A      	db: 9D
+ADDC D,  B	 	db: 9E
+ADDC D,  C 	 	db: 9F
+
+SUB  A,  B     	  	db: A0
+SUB  A,  C    	   	db: A1
+SUB  A,  D     	  	db: A2
+SUB  B,  A       	db: A3
+SUB  B,  C      	db: A4
+SUB  B,  D      	db: A5
+SUB  C,  A       	db: A6
+SUB  C,  B      	db: A7
+SUB  C,  D      	db: A8
+SUB  D,  A      	db: A9
+SUB  D,  B	 	db: AA
+SUB  D,  C 	 	db: AB
+
+SUBB A,  B     	  	db: AC
+SUBB A,  C    	   	db: AD
+SUBB A,  D     	  	db: AE
+SUBB B,  A       	db: AF
+SUBB B,  C      	db: B0
+SUBB B,  D      	db: B1
+SUBB C,  A       	db: B2
+SUBB C,  B      	db: B3
+SUBB C,  D      	db: B4
+SUBB D,  A      	db: B5
+SUBB D,  B	 	db: B6
+SUBB D,  C 	 	db: B7
+
+INC  A			db: B8
+INC  B			db: B9
+INC  C			db: BA
+INC  D			db: BB
+
+INCC A			db: BC
+INCC B			db: BD
+INCC C			db: BE
+INCC D			db: BF
+
+DEC  A			db: C0
+DEC  B			db: C1
+DEC  C			db: C2
+DEC  D			db: C3
+
+AND  A,  B     	  	db: C4
+AND  A,  C    	   	db: C5
+AND  A,  D     	  	db: C6
+AND  B,  A       	db: C7
+AND  B,  C      	db: C8
+AND  B,  D      	db: C9
+AND  C,  A       	db: CA
+AND  C,  B      	db: CB
+AND  C,  D      	db: CC
+AND  D,  A      	db: CD
+AND  D,  B	 	db: CE
+AND  D,  C 	 	db: CF
+
+OR   A,  B     	  	db: D0
+OR   A,  C    	   	db: D1
+OR   A,  D     	  	db: D2
+OR   B,  A       	db: D3
+OR   B,  C      	db: D4
+OR   B,  D      	db: D5
+OR   C,  A       	db: D6
+OR   C,  B      	db: D7
+OR   C,  D      	db: D8
+OR   D,  A      	db: D9
+OR   D,  B	 	db: DA
+OR   D,  C 	 	db: DB
+
+XOR  A,  A		db: DC
+XOR  A,  B     	  	db: DD
+XOR  A,  C    	   	db: DE
+XOR  A,  D     	  	db: DF
+XOR  B,  A       	db: E0
+XOR  B,  B		db: E1
+XOR  B,  C      	db: E2
+XOR  B,  D      	db: E3
+XOR  C,  A       	db: E4
+XOR  C,  B      	db: E5
+XOR  C,  C		db: E6
+XOR  C,  D      	db: E7
+XOR  D,  A      	db: E8
+XOR  D,  B	 	db: E9
+XOR  D,  C 	 	db: EA
+XOR  D,  D		db: EB
+
+NOT  A			db: EC
+NOT  B			db: ED
+NOT  C			db: EE
+NOT  D			db: EF
+
+CMP  A,  B     	  	db: F0
+CMP  A,  C    	   	db: F1
+CMP  A,  D     	  	db: F2
+CMP  B,  A       	db: F3
+CMP  B,  C      	db: F4
+CMP  B,  D      	db: F5
+CMP  C,  A       	db: F6
+CMP  C,  B      	db: F7
+CMP  C,  D      	db: F8
+CMP  D,  A      	db: F9
+CMP  D,  B	 	db: FA
+CMP  D,  C 	 	db: FB
+
+TEST A			db: FC
+TEST B			db: FD
+TEST C			db: FE
+TEST D			db: FF
+
+
+
