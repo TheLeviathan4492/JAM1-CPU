@@ -447,10 +447,11 @@ def replace_constants(line_data):
 
 def split_psuedo_constants(const_instructions, const_data):
   const_address_offset = 0
-  for index, const_instruction in enumerate(const_instructions):
+  for index, item in enumerate(const_instructions):
+    const_instruction = item.strip()
     adjusted_index = index + const_address_offset
     if const_instruction in psuedo_instructions:
-      constant = const_data[adjusted_index]
+      constant = str(const_data[adjusted_index])
       split_constants = []
       if constant.isdigit():
         split_constants = [str(int(constant)&255), str((int(constant)>>8)&255)]
@@ -458,21 +459,23 @@ def split_psuedo_constants(const_instructions, const_data):
         split_constants = [constant + 'L', constant + 'H']
       const_data[adjusted_index:adjusted_index+1] = split_constants
       const_address_offset += 1
+
   return const_data
         
 
 def split_psuedo_instructions(line_data, constant_data):
   const_instructions = []
+  for line in line_data:
+    if '#' in line:
+        const_instructions.append(line)
   for index, code_line in enumerate(line_data):
     new_lines = []
     line = code_line.strip()
-    if '#' in line:
-        const_instructions.append(line)
     if line in psuedo_instructions:
       for split_instruction in psuedo_instructions[line]:
         new_lines.append('  '+split_instruction)
       line_data[index:index+1] = new_lines 
-    constant_data = split_psuedo_constants(const_instructions, constant_data)
+  constant_data = split_psuedo_constants(const_instructions, constant_data)
   return [line_data, constant_data]
 
 def add_in_labels(line_data, constant_data, data_byte_data):
